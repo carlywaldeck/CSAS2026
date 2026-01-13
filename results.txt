@@ -1,0 +1,57 @@
+Loading data files...
+Mowat Teams: [27 14]
+Italy Teams: [24]
+
+--- Power Play Efficiency ---
+       Ends  Avg Pts  Std Dev   2+ %   3+ %   4+ %
+Group                                             
+Field   533    1.608    1.515  0.450  0.212  0.058
+Italy    28    2.071    2.243  0.571  0.179  0.107
+Mowat    37    1.811    0.938  0.649  0.216  0.027
+
+--- Strategy Analysis for Big Scores (3+) ---
+
+Shot 2 Selection Distribution (Proportion):
+TaskName  Clearing   Draw  Freeze  Front  ...  Raise  Take-out  Through   Wick
+Group                                     ...                                 
+Field        0.002  0.730   0.002  0.006  ...  0.069     0.004    0.000  0.069
+Italy        0.000  0.607   0.000  0.000  ...  0.036     0.000    0.036  0.214
+Mowat        0.027  0.649   0.000  0.000  ...  0.108     0.000    0.000  0.162
+
+[3 rows x 9 columns]
+
+Mowat: Avg Score by Shot 2 Type:
+          count      mean
+TaskName                 
+Guard         2  2.500000
+Wick          6  2.166667
+Draw         24  1.791667
+Raise         4  1.250000
+Clearing      1  1.000000
+
+Italy: Avg Score by Shot 2 Type:
+          count      mean
+TaskName                 
+Wick          6  3.500000
+Raise         1  2.000000
+Draw         17  1.764706
+Guard         3  1.333333
+Through       1  1.000000
+
+Opponent Shot 1 Selection vs Group:
+TaskName  Clearing   Draw  Freeze  Front  ...  Prom Take-out  Raise  Take-out   Wick
+Group                                     ...                                       
+Field        0.002  0.360   0.006  0.126  ...          0.002  0.159     0.002  0.278
+Italy        0.000  0.393   0.000  0.286  ...          0.000  0.107     0.000  0.143
+Mowat        0.000  0.297   0.000  0.270  ...          0.000  0.054     0.000  0.243
+
+[3 rows x 9 columns]
+
+Most Common Shot 2 choice when scoring 3+ (Universal):
+TaskName
+Draw        0.801587
+Wick        0.079365
+Raise       0.063492
+Guard       0.047619
+Take-out    0.007937
+Name: proportion, dtype: float64
