@@ -1,103 +1,28 @@
-Curling Rules!!! 
+# CSAS 2026 Submission: The "First Strike" Analytical Framework
 
-Stone: The heavy rock you slide on the ice.
+This repository contains the complete analytical framework for optimizing the Mixed Doubles Power Play, developed by a group of three researchers with backgrounds in the baseball industry.
 
-House: The circular target at the end of the sheet.
+## **Core Submission Documents**
+1.  **[Submission_Dissertation.md](Submission_Dissertation.md)**: The definitive 2000-word research paper detailing the "Fireman and the Closer" philosophy, XGBoost modeling, and strategic validation.
+2.  **[Report.md](Report.md)**: The **12-Section Elite Bench Manual** for real-time coaching decision support.
+3.  **[Executive_Summary.md](Executive_Summary.md)**: A high-level overview of our 6 core innovations for the competition jury.
 
-Button: The exact center of the house.
+## **Visual Assets**
+- **[Shot_3_EV_Map.png](Shot_3_EV_Map.png)**: Spatial mapping of Expected Value (EV) by ice state.
+- **[Defensive_Positioning.png](Defensive_Positioning.png)**: Target zones for neutralizing opponent Power Plays.
 
-End: One round where both teams throw all their stones (like a full inning).
+## **Analytical Engine (Scripts)**
+- **compute_competition_metrics.py**: The primary processing engine for EV calcs and the Chaos State Index (CSI).
+- **final_data_audit.py**: Statistical verification and performance decomposition.
+- **analyze_pp_timing.py**: Research foundation for the "First Strike" strategy.
+- **analyze_usa.py**: Identification of the "Chaos Agent" tactical identity.
+- **analyze_bimodal_utility.py**: Validation of scoring vs. stability modes.
+- **analyze_opening_scripts.py**: Mapping of the first three stones to end outcomes.
+- **analyze_side_bias.py**: Quantifying the "Hot Turn" handle bias.
+- **analyze_benchmarking.py**: International performance and execution benchmarks.
 
-Hammer: The advantage of throwing last in an end.
+## **Data Basis**
+The framework is anchored in the provided **Stones.csv** (~26k throws) and **Ends.csv** (~5.2k ends) datasets.
 
-Sheet: The playing surface (the ice lane).
-
-Guard: A stone placed in front of the house to block shots.
-
-Sweep: Using a broom to make a stone go farther and straighter.
-
-Blank End: An end where no one scores.
-
-Power Play: A once-per-game option to move the starting stones to the side.
-
-
-Teams
-
-2 players per team
-
-Players can switch throwing roles between ends
-
-
-Game Length
-
-8 ends
-
-If tied, play extra ends until someone wins
-
-
-Stones per End
-
-5 stones per team
-
-10 stones total per end
-
-
-Starting Stones (Pre-Placed)
-
-Before any stones are thrown:
-
-1 stone in the house
-
-Belongs to the team without hammer
-
-1 stone in front of the house
-
-Belongs to the team with hammer
-
-Rules for these stones:
-
-They cannot be knocked out until stone #5 is thrown
-
-
-Power Play
-
-Each team can use once per game
-
-Moves the two starting stones from the center to one side
-
-Must be chosen before the end starts
-
-Not allowed in extra ends
-
-
-Throwing Order
-
-One player throws 1st and 5th stones
-
-Other player throws 2nd, 3rd, and 4th stones
-
-Players decide who does what
-
-
-Sweeping Rules
-
-Only one person sweeps
-
-The thrower cannot sweep their own stone
-
-Opponents can sweep after the stone crosses the tee line
-
-
-Scoring
-
-Only one team scores per end
-
-Score 1 point for each stone closer to the button than the opponent’s closest stone
-
-Hammer Rules
-
-Team with hammer throws last
-
-If you score, you lose hammer next end
-
-If the end is blank, hammer stays
+---
+**Version 1.0 | CSAS 2026 Submission Package**
