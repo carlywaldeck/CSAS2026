@@ -1,5 +1,5 @@
-# CSV Data Files (per challenge requirements - do not include in submission)
-*.csv
+# CSV Data Files - KEEP IN GIT (user requirement)
+# *.csv
 
 # Python cache
 __pycache__/
