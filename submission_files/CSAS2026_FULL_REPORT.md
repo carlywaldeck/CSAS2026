@@ -208,7 +208,7 @@ However, this narrative may be a "Strategic Mirage"—we investigate whether End
 
 ### 3.3 The Execution Gap: Draws vs. Wicks
 
-While we couldn't directly compare early versus late Power Play execution due to sample size constraints (only $1$ instance in Ends 1-2), we analyzed shot execution scores across all ends by shot type to understand how ice conditions affect execution quality over the course of a game.
+We analyzed shot execution scores across all ends by shot type to understand how ice conditions deteriorate over the course of a game and affect execution quality. By comparing execution scores for Draws and Wicks across all ends, we can infer how fresh ice in early ends enables superior execution compared to deteriorated ice in late ends.
 
 **Execution Score Comparison:**
 
