@@ -180,12 +180,12 @@ Our analysis reveals a striking pattern in Power Play deployment that we term th
 **Deployment Statistics:**
 - Total ends analyzed: $5,274$
 - Total Power Play ends: $598$ ($11.3\%$ of all ends)
-- End 1-2 Power Play count: $1$ ($0.02\%$ of all ends, $0.17\%$ of all Power Plays) - End 2 by Norway, scored 0 points
-- End 4 Power Play count: $27$ ($4.5\%$ of all Power Plays)
-- End 6-7 Power Play count: $413$ ($69.1\%$ of all Power Plays) - Vast majority in late ends
-- End 8 Power Play count: $65$ ($10.9\%$ of all Power Plays)
+- **Ends 1-2:** $1$ Power Play ($0.17\%$) - End 2 by Norway, scored 0 points
+- **Ends 3-4:** $42$ Power Plays ($7.0\%$)
+- **Ends 5-7:** $490$ Power Plays ($82.0\%$) - **Peak deployment in Ends 6-7 ($69.1\%$)**
+- **End 8:** $65$ Power Plays ($10.9\%$)
 
-This near-total absence of early deployment represents strategic consensus among elite teams: early Power Play deployment carries unacceptable risk relative to its potential reward. However, this consensus may be fear-justified rather than data-justified, as the sample size for early deployment ($1$ instance) prevents statistical validation.
+The distribution is strongly left-skewed, with deployment concentrated in Ends 6-7. End 6 contains $205$ Power Plays ($34.3\%$) and End 7 contains $208$ Power Plays ($34.8\%$), together accounting for $69.1\%$ of all Power Plays. This reveals that teams deploy most frequently in the penultimate ends, not the final end. The near-total absence of early deployment (only $1$ instance in Ends 1-2) represents strategic consensus among elite teams, but this consensus may be fear-justified rather than data-justified, as the sample size for early deployment prevents statistical validation.
 
 ### 3.2 Power Play Efficiency by End
 
@@ -194,8 +194,11 @@ This near-total absence of early deployment represents strategic consensus among
 | End Category | Power Play Average | Sample Size | Interpretation |
 |--------------|-------------------|-------------|----------------|
 | Ends 1-2     | $0.00$*           | $1$         | Conservation Deadlock (statistically unreliable) |
-| End 4        | $0.96$            | $43$        | Standard Efficiency |
-| End 8        | **$2.51$**        | $65$        | **Apparent Peak** |
+| End 4        | $0.96$            | $27$        | Standard Efficiency |
+| End 5        | $1.53$            | $77$        | Mid-game deployment |
+| End 6        | $1.53$            | $205$       | Peak deployment frequency |
+| End 7        | $1.67$            | $208$       | Peak deployment frequency |
+| End 8        | **$2.51$**        | $65$        | **Apparent Peak** (highest average, lower frequency) |
 
 *Note: Only 1 instance prevents statistical reliability for Ends 1-2*
 
