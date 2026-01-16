@@ -22,8 +22,8 @@ CENTER_CORRIDOR = 200
 SENTINEL = 4095  # stone knocked off
 NOT_THROWN = 0
 
-# Data directory
-DATA_DIR = "/Users/tsobazy/Desktop/curling/CSAS2026"
+# Data directory - CSV files should be in parent directory
+DATA_DIR = "../"
 
 
 def load_data():
@@ -387,8 +387,8 @@ def compare_teams(ends, stones):
     }
 
 
-def make_plot(ends):
-    """Create bar chart of Power Play effectiveness by end."""
+def make_plots(ends):
+    """Create bar charts for Power Play analysis."""
     print("\n" + "="*70)
     print("7. VISUALIZATION")
     print("="*70)
@@ -396,36 +396,79 @@ def make_plot(ends):
     # Get Power Play ends
     pp = ends[ends['PowerPlay'].notna() & (ends['PowerPlay'] > 0)].copy()
     
-    # Group by end
-    by_end = pp.groupby('EndID').agg({
-        'Result': ['mean', 'count', 'std']
-    }).reset_index()
-    by_end.columns = ['EndID', 'AvgPoints', 'Count', 'StdDev']
+    # Graph 1: Distribution by end
+    print("\nCreating distribution graph...")
+    end_counts = []
+    for end in range(1, 9):
+        count = len(pp[pp['EndID'] == end])
+        end_counts.append(count)
     
-    # Make plot
-    fig, ax = plt.subplots(figsize=(10, 6))
-    bars = ax.bar(by_end['EndID'], by_end['AvgPoints'], 
-                  yerr=by_end['StdDev'].fillna(0),
-                  capsize=5, alpha=0.7, color='steelblue', edgecolor='black')
+    fig1, ax1 = plt.subplots(figsize=(9, 6))
+    bars1 = ax1.bar(range(1, 9), end_counts, color='#4472C4', edgecolor='black', linewidth=1.0)
+    ax1.set_xlabel('End Number', fontsize=11)
+    ax1.set_ylabel('Number of Power Plays', fontsize=11)
+    ax1.set_title('Power Play Deployment Distribution by End', fontsize=12, fontweight='bold')
+    ax1.set_xticks(range(1, 9))
+    ax1.grid(axis='y', alpha=0.3)
     
-    ax.set_xlabel('End Number', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Average Points Scored', fontsize=12, fontweight='bold')
-    ax.set_title('Power Play Effectiveness by End Number', fontsize=14, fontweight='bold')
-    ax.set_xticks(range(1, 9))
-    ax.grid(axis='y', alpha=0.3, linestyle='--')
-    
-    # Add count labels
-    for i in range(len(by_end)):
-        end = by_end.iloc[i]
-        ax.text(end['EndID'], end['AvgPoints'] + end['StdDev'] + 0.05,
-                f'n={int(end["Count"])}', ha='center', va='bottom', fontsize=9)
+    # Add labels
+    for i, (bar, count) in enumerate(zip(bars1, end_counts)):
+        if count > 0:
+            height = bar.get_height()
+            pct = (count / len(pp)) * 100
+            ax1.text(bar.get_x() + bar.get_width()/2., height + 3,
+                    f'{count}\n({pct:.1f}%)',
+                    ha='center', va='bottom', fontsize=8)
     
     plt.tight_layout()
+    out_path1 = 'power_play_distribution.png'
+    plt.savefig(out_path1, dpi=200, bbox_inches='tight')
+    print(f"Saved: {out_path1}")
+    plt.close()
     
-    # Save
-    out_path = os.path.join(DATA_DIR, 'power_play_by_end.png')
-    plt.savefig(out_path, dpi=300, bbox_inches='tight')
-    print(f"\nSaved to: {out_path}")
+    # Graph 2: Average points by end
+    print("Creating average points graph...")
+    end_avgs = []
+    end_counts2 = []
+    end_nums = []
+    
+    for end in range(1, 9):
+        end_data = pp[pp['EndID'] == end]
+        if len(end_data) > 0:
+            avg = end_data['Result'].mean()
+            end_avgs.append(avg)
+            end_counts2.append(len(end_data))
+            end_nums.append(end)
+        else:
+            end_avgs.append(0)
+            end_counts2.append(0)
+            end_nums.append(end)
+    
+    fig2, ax2 = plt.subplots(figsize=(9, 6))
+    colors = ['#4472C4' if count > 0 else '#CCCCCC' for count in end_counts2]
+    bars2 = ax2.bar(end_nums, end_avgs, color=colors, edgecolor='black', linewidth=1.0)
+    ax2.set_xlabel('End Number', fontsize=11)
+    ax2.set_ylabel('Average Points Scored', fontsize=11)
+    ax2.set_title('Power Play Average Points by End Number', fontsize=12, fontweight='bold')
+    ax2.set_xticks(range(1, 9))
+    ax2.grid(axis='y', alpha=0.3)
+    
+    # Add labels
+    for i, (bar, avg, count) in enumerate(zip(bars2, end_avgs, end_counts2)):
+        if count > 0:
+            height = bar.get_height()
+            ax2.text(bar.get_x() + bar.get_width()/2., height + 0.05,
+                    f'{avg:.2f}\n(n={count})',
+                    ha='center', va='bottom', fontsize=8)
+        else:
+            ax2.text(bar.get_x() + bar.get_width()/2., 0.1,
+                    'n=0',
+                    ha='center', va='bottom', fontsize=8, style='italic')
+    
+    plt.tight_layout()
+    out_path2 = 'power_play_avg_points.png'
+    plt.savefig(out_path2, dpi=200, bbox_inches='tight')
+    print(f"Saved: {out_path2}")
     plt.close()
 
 
@@ -448,7 +491,7 @@ def main():
     draws, wicks = analyze_shot_types(stones)
     traffic_analysis = analyze_traffic_effect(stones_traffic, ends)
     team_comp = compare_teams(ends, stones)
-    make_plot(ends)
+    make_plots(ends)
     
     # Summary
     print("\n" + "="*70)
