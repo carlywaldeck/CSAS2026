@@ -301,17 +301,3 @@ For questions about:
 - **Results:** See Results section in `CSAS2026_FULL_REPORT.md`
 - **Code Logic:** See function docstrings and comments in `challenge_analysis.py`
 
----
-
-## Version Information
-
-**Version:** Final Submission  
-**Date:** January 2026  
-**Python Version:** 3.7+  
-**Author:** Cal Poly Student (CS 202/203)
-
----
-
-## License
-
-This code is submitted for the CSAS 2026 Data Challenge. All analysis and findings are original work based on the provided dataset.
