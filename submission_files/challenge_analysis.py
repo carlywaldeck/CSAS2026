@@ -1,11 +1,11 @@
 """
-CSAS 2026 Curling Data Challenge - Strategic Analysis
-Power Play Deployment Analysis for Mixed Doubles Curling
+CSAS 2026 Curling Data Challenge
+Power Play Strategy Analysis
 
-This script analyzes Power Play strategy in international Mixed Doubles Curling competition.
-It calculates key metrics to answer: When should teams deploy the Power Play?
+Analyzes when teams should deploy Power Plays in Mixed Doubles Curling.
+Calculates metrics like Traffic, execution scores, and deployment patterns.
 
-Author: Cal Poly Student (CS 202)
+Author: [Your Name]
 Date: 2026
 """
 
@@ -14,644 +14,456 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-# ============================================================================
-# CONSTANTS - These values come from the challenge description
-# ============================================================================
-
-# The button (center of the house) is at these coordinates
+# Constants from the challenge description
 BUTTON_X = 750
 BUTTON_Y = 800
-
-# A stone is "in the house" if it's within 600 units of the button
 HOUSE_RADIUS = 600
+CENTER_CORRIDOR = 200
+SENTINEL = 4095  # stone knocked off
+NOT_THROWN = 0
 
-# The center corridor is defined as |X - 750| < 200
-CENTER_CORRIDOR_WIDTH = 200
-CENTER_LINE_X = 750
-
-# Special values in the data:
-# - 4095 means the stone was knocked off the sheet
-# - 0 means the stone hasn't been thrown yet
-SENTINEL_VALUE = 4095  # Stone removed from play
-NOT_THROWN = 0  # Stone not yet thrown
-
-# Where our data files are located
+# Data directory
 DATA_DIR = "/Users/tsobazy/Desktop/curling/CSAS2026"
 
 
-# ============================================================================
-# DATA LOADING FUNCTIONS
-# ============================================================================
-
 def load_data():
-    """
-    Load the CSV files we need for analysis.
-    
-    Returns:
-        stones: DataFrame with stone-level data (each row is one shot)
-        ends: DataFrame with end-level data (each row is one end)
-    """
-    stones = pd.read_csv(os.path.join(DATA_DIR, "Stones.csv"))
-    ends = pd.read_csv(os.path.join(DATA_DIR, "Ends.csv"))
+    """Load the CSV files."""
+    stones_path = os.path.join(DATA_DIR, "Stones.csv")
+    ends_path = os.path.join(DATA_DIR, "Ends.csv")
+    stones = pd.read_csv(stones_path)
+    ends = pd.read_csv(ends_path)
     return stones, ends
 
 
-# ============================================================================
-# HELPER FUNCTIONS
-# ============================================================================
+def distance_to_button(x, y):
+    """Calculate distance from stone to button using distance formula."""
+    dx = x - BUTTON_X
+    dy = y - BUTTON_Y
+    return np.sqrt(dx*dx + dy*dy)
 
-def calculate_distance_to_button(x, y):
+
+def calculate_traffic(stones):
     """
-    Calculate how far a stone is from the button (center of the house).
-    
-    Uses the distance formula: sqrt((x1-x2)^2 + (y1-y2)^2)
-    
-    Args:
-        x: X coordinate of the stone
-        y: Y coordinate of the stone
-    
-    Returns:
-        Distance from the button
-    """
-    # Calculate the difference in x and y coordinates
-    x_diff = x - BUTTON_X
-    y_diff = y - BUTTON_Y
-    
-    # Use Pythagorean theorem to get distance
-    distance = np.sqrt(x_diff**2 + y_diff**2)
-    return distance
-
-
-# ============================================================================
-# MAIN ANALYSIS FUNCTIONS
-# ============================================================================
-
-def calculate_traffic(stones_df):
-    """
-    Calculate "Traffic" - how many stones are in the house at each shot.
-    
-    This is like "traffic on the bases" in baseball - more stones in the house
-    means it's harder to make shots because there are obstacles in the way.
-    
-    Args:
-        stones_df: DataFrame with stone position data
-    
-    Returns:
-        DataFrame with a new 'Traffic' column added
+    Calculate Traffic metric - number of stones in the house.
+    Traffic is like congestion - more stones = harder to score.
     """
     print("\n" + "="*70)
     print("1. TRAFFIC CALCULATION")
     print("="*70)
     
-    # Make a copy so we don't modify the original data
-    stones = stones_df.copy()
+    # Make copy so we don't mess up original
+    df = stones.copy()
+    traffic_list = []
     
-    # This list will store the traffic count for each shot
-    traffic_values = []
-    
-    # Loop through each shot (each row in the dataframe)
-    for idx, row in stones.iterrows():
-        stones_in_house = 0
+    # Loop through each shot
+    for i in range(len(df)):
+        row = df.iloc[i]
+        count = 0
         
-        # Check each of the 12 possible stone positions
+        # Check all 12 stone positions
         for stone_num in range(1, 13):
-            # Get the x and y coordinates for this stone
-            x_col = f'stone_{stone_num}_x'
-            y_col = f'stone_{stone_num}_y'
+            x_col = 'stone_' + str(stone_num) + '_x'
+            y_col = 'stone_' + str(stone_num) + '_y'
             
-            x_val = row[x_col]
-            y_val = row[y_col]
+            x = row[x_col]
+            y = row[y_col]
             
-            # Skip stones that haven't been thrown or were knocked off
-            if pd.isna(x_val) or pd.isna(y_val):
+            # Skip if not valid
+            if pd.isna(x) or pd.isna(y):
                 continue
-            if x_val == NOT_THROWN or y_val == NOT_THROWN:
+            if x == NOT_THROWN or y == NOT_THROWN:
                 continue
-            if x_val == SENTINEL_VALUE or y_val == SENTINEL_VALUE:
+            if x == SENTINEL or y == SENTINEL:
                 continue
             
-            # Calculate distance to button
-            distance = calculate_distance_to_button(x_val, y_val)
-            
-            # If the stone is within the house radius, count it
-            if distance <= HOUSE_RADIUS:
-                stones_in_house += 1
+            # Check if in house
+            dist = distance_to_button(x, y)
+            if dist <= HOUSE_RADIUS:
+                count += 1
         
-        # Store the traffic count for this shot
-        traffic_values.append(stones_in_house)
+        traffic_list.append(count)
     
-    # Add the traffic column to our dataframe
-    stones['Traffic'] = traffic_values
+    df['Traffic'] = traffic_list
     
-    # Print summary statistics
-    print(f"\nTotal shots analyzed: {len(stones):,}")
-    print(f"Average Traffic (stones in house per shot): {stones['Traffic'].mean():.2f}")
-    print(f"Maximum Traffic (most congested state): {stones['Traffic'].max()}")
-    print(f"Standard deviation: {stones['Traffic'].std():.2f}")
+    # Print stats
+    print(f"\nTotal shots: {len(df):,}")
+    print(f"Average Traffic: {df['Traffic'].mean():.2f}")
+    print(f"Max Traffic: {df['Traffic'].max()}")
     
-    print("\nTraffic Statistics by End:")
-    traffic_by_end = stones.groupby('EndID')['Traffic'].agg(['mean', 'max']).round(2)
-    print(traffic_by_end)
+    # Stats by end
+    print("\nTraffic by End:")
+    end_stats = df.groupby('EndID')['Traffic'].agg(['mean', 'max'])
+    print(end_stats.round(2))
     
-    return stones
+    return df
 
 
-def calculate_power_play_readiness_score(stones_df, ends_df):
+def calculate_pprs(stones, ends):
     """
-    Calculate Power Play Readiness Score (PPRS) for early ends.
-    
-    This measures how clogged the center corridor is in the first two ends.
-    If the center is too crowded, it might not be a good time for a Power Play.
-    
-    Args:
-        stones_df: DataFrame with stone position data
-        ends_df: DataFrame with end-level data
-    
-    Returns:
-        DataFrame with PPRS column added for ends 1-2
+    Power Play Readiness Score - measures center congestion in early ends.
+    Only calculated for ends 1-2.
     """
     print("\n" + "="*70)
-    print("2. POWER PLAY READINESS SCORE (PPRS) CALCULATION")
+    print("2. POWER PLAY READINESS SCORE")
     print("="*70)
     
-    # Make a copy and filter to just the first two ends
-    stones = stones_df.copy()
-    early_ends = stones[stones['EndID'].isin([1, 2])].copy()
+    # Filter to ends 1-2
+    early = stones[stones['EndID'].isin([1, 2])].copy()
+    pprs_list = []
     
-    # This list will store the PPRS for each shot
-    pprs_values = []
-    
-    # Loop through each shot in the early ends
-    for idx, row in early_ends.iterrows():
-        center_stones = 0
+    for i in range(len(early)):
+        row = early.iloc[i]
+        center_count = 0
         
-        # Check each of the 12 possible stone positions
         for stone_num in range(1, 13):
-            x_col = f'stone_{stone_num}_x'
-            y_col = f'stone_{stone_num}_y'
+            x_col = 'stone_' + str(stone_num) + '_x'
+            y_col = 'stone_' + str(stone_num) + '_y'
             
-            x_val = row[x_col]
-            y_val = row[y_col]
+            x = row[x_col]
+            y = row[y_col]
             
-            # Skip stones that haven't been thrown or were knocked off
-            if pd.isna(x_val) or pd.isna(y_val):
+            if pd.isna(x) or pd.isna(y):
                 continue
-            if x_val == NOT_THROWN or y_val == NOT_THROWN:
+            if x == NOT_THROWN or y == NOT_THROWN:
                 continue
-            if x_val == SENTINEL_VALUE or y_val == SENTINEL_VALUE:
+            if x == SENTINEL or y == SENTINEL:
                 continue
             
-            # Check if stone is in the center corridor: |X - 750| < 200
-            x_distance_from_center = abs(x_val - CENTER_LINE_X)
-            if x_distance_from_center < CENTER_CORRIDOR_WIDTH:
-                center_stones += 1
+            # Center corridor: |X - 750| < 200
+            if abs(x - BUTTON_X) < CENTER_CORRIDOR:
+                center_count += 1
         
-        pprs_values.append(center_stones)
+        pprs_list.append(center_count)
     
-    # Add the PPRS column
-    early_ends['PPRS'] = pprs_values
+    early['PPRS'] = pprs_list
     
-    # Print summary statistics
-    print(f"\nTotal shots in Ends 1-2: {len(early_ends):,}")
-    print(f"Average PPRS (center corridor stones): {early_ends['PPRS'].mean():.2f}")
-    print(f"Maximum PPRS: {early_ends['PPRS'].max()}")
+    print(f"\nShots in Ends 1-2: {len(early):,}")
+    print(f"Average PPRS: {early['PPRS'].mean():.2f}")
+    print(f"Max PPRS: {early['PPRS'].max()}")
     
-    print("\nPPRS by End:")
-    pprs_by_end = early_ends.groupby('EndID')['PPRS'].agg(['mean', 'max']).round(2)
-    print(pprs_by_end)
-    
-    return early_ends
+    return early
 
 
-def analyze_power_play_deployment(ends_df):
-    """
-    Analyze when teams deploy Power Plays and how effective they are.
-    
-    This function looks at:
-    - How many Power Plays happen in each end
-    - Average points scored in each end
-    - "Big End" rate (ends where teams score 3+ points)
-    
-    Args:
-        ends_df: DataFrame with end-level data
-    
-    Returns:
-        DataFrame with Power Play ends and analysis
-    """
+def analyze_deployment(ends):
+    """Analyze when Power Plays are deployed and how effective they are."""
     print("\n" + "="*70)
     print("3. POWER PLAY DEPLOYMENT ANALYSIS")
     print("="*70)
     
-    # Filter to only Power Play ends (PowerPlay column is not NaN and > 0)
-    pp_ends = ends_df[ends_df['PowerPlay'].notna() & (ends_df['PowerPlay'] > 0)].copy()
+    # Get Power Play ends
+    pp = ends[ends['PowerPlay'].notna() & (ends['PowerPlay'] > 0)].copy()
     
-    # Overall statistics
-    print(f"\nTotal Power Play Ends: {len(pp_ends)}")
-    print(f"Overall Average Points: {pp_ends['Result'].mean():.2f}")
+    print(f"\nTotal Power Plays: {len(pp)}")
+    print(f"Average Points: {pp['Result'].mean():.2f}")
     
-    # Calculate Big End rate (percentage of Power Plays scoring 3+ points)
-    big_end_count = (pp_ends['Result'] >= 3).sum()
-    big_end_rate = (big_end_count / len(pp_ends)) * 100
-    print(f"Overall Big End Rate (3+ pts): {big_end_rate:.1f}%")
+    # Big End rate
+    big_ends = (pp['Result'] >= 3).sum()
+    big_end_rate = (big_ends / len(pp)) * 100
+    print(f"Big End Rate (3+ pts): {big_end_rate:.1f}%")
     
-    # Analyze by end number
+    # By end number
     print("\n" + "-" * 70)
-    print("DEPLOYMENT DISTRIBUTION BY END:")
+    print("By End Number:")
     print("-" * 70)
     
-    # Group by end and calculate statistics
-    end_stats = pp_ends.groupby('EndID').agg({
-        'Result': ['count', 'mean'],
-    }).round(2)
-    end_stats.columns = ['Count', 'AvgPoints']
-    end_stats['Percentage'] = (end_stats['Count'] / len(pp_ends) * 100).round(1)
-    print(end_stats)
+    end_grouped = pp.groupby('EndID').agg({
+        'Result': ['count', 'mean']
+    })
+    end_grouped.columns = ['Count', 'AvgPoints']
+    end_grouped['Pct'] = (end_grouped['Count'] / len(pp) * 100).round(1)
+    print(end_grouped)
     
-    # Categorize ends into Early, Middle, and Late
-    def categorize_end(end_num):
-        """Helper function to categorize ends"""
-        if end_num <= 2:
-            return 'Early (1-2)'
-        elif end_num >= 7:
-            return 'Late (7-8)'
+    # Categorize
+    def get_category(end_id):
+        if end_id <= 2:
+            return 'Early'
+        elif end_id >= 7:
+            return 'Late'
         else:
-            return 'Middle (3-6)'
+            return 'Middle'
     
-    pp_ends['EndCategory'] = pp_ends['EndID'].apply(categorize_end)
+    pp['Category'] = pp['EndID'].apply(get_category)
     
-    # Calculate statistics by category
-    category_stats = pp_ends.groupby('EndCategory').agg({
-        'Result': ['mean', 'count'],
-    }).round(2)
-    
-    # Calculate Big End rate by category
-    big_end_by_category = pp_ends.groupby('EndCategory').apply(
+    # Stats by category
+    cat_stats = pp.groupby('Category')['Result'].agg(['mean', 'count'])
+    big_end_by_cat = pp.groupby('Category').apply(
         lambda x: (x['Result'] >= 3).sum() / len(x) * 100
-    ).round(2)
+    )
     
     print("\n" + "-" * 70)
-    print("PERFORMANCE BY CATEGORY:")
+    print("By Category:")
     print("-" * 70)
-    print("\nAverage Points Scored:")
-    print(category_stats[('Result', 'mean')])
-    print("\nNumber of Power Plays:")
-    print(category_stats[('Result', 'count')])
-    print("\nBig End Rate (% with Result >= 3):")
-    print(big_end_by_category)
+    print("\nAverage Points:")
+    print(cat_stats['mean'])
+    print("\nCount:")
+    print(cat_stats['count'])
+    print("\nBig End Rate:")
+    print(big_end_by_cat.round(2))
     
-    # Special analysis for early Power Plays (the key finding)
-    early_pp = pp_ends[pp_ends['EndCategory'] == 'Early (1-2)']
+    # Early PP analysis (key finding)
+    early_pp = pp[pp['Category'] == 'Early']
     print("\n" + "-" * 70)
-    print("EARLY POWER PLAY ANALYSIS (Ends 1-2):")
+    print("Early Power Plays (Ends 1-2):")
     print("-" * 70)
     print(f"Count: {len(early_pp)}")
     if len(early_pp) > 0:
-        print(f"Average Points: {early_pp['Result'].mean():.2f}")
-        print(f"Percentage of Total PPs: {len(early_pp) / len(pp_ends) * 100:.2f}%")
+        print(f"Average: {early_pp['Result'].mean():.2f}")
+        print(f"Percentage: {len(early_pp)/len(pp)*100:.2f}%")
     else:
-        print("No early power plays found in dataset.")
+        print("None found")
     
-    return pp_ends
+    return pp
 
 
-def analyze_shot_accuracy(stones_df):
-    """
-    Compare execution quality between different shot types.
-    
-    Task 0 = Draw (standard shot to the house)
-    Task 4 = Wick/Tick (trick shot using other stones)
-    
-    The Points column is an execution score from 0-4, where 4.0 is perfect.
-    
-    Args:
-        stones_df: DataFrame with stone-level data
-    
-    Returns:
-        Tuple of (draws DataFrame, wicks DataFrame)
-    """
+def analyze_shot_types(stones):
+    """Compare execution scores for Draws vs Wicks."""
     print("\n" + "="*70)
-    print("4. SHOT ACCURACY ANALYSIS - Draw vs Wick")
+    print("4. SHOT ACCURACY - Draws vs Wicks")
     print("="*70)
     
-    # Filter to just Draws (Task 0) and Wicks (Task 4)
-    draws = stones_df[stones_df['Task'] == 0].copy()
-    wicks = stones_df[stones_df['Task'] == 4].copy()
+    # Filter to each shot type
+    draws = stones[stones['Task'] == 0]
+    wicks = stones[stones['Task'] == 4]
     
-    # Calculate average execution scores
     draw_avg = draws['Points'].mean()
     wick_avg = wicks['Points'].mean()
     
-    # Print results
     print(f"\nDraws (Task 0):")
-    print(f"  Total shots: {len(draws):,}")
-    print(f"  Average execution score: {draw_avg:.2f}/4.0")
-    print(f"  Standard deviation: {draws['Points'].std():.2f}")
+    print(f"  Count: {len(draws):,}")
+    print(f"  Avg Score: {draw_avg:.2f}/4.0")
+    print(f"  Std Dev: {draws['Points'].std():.2f}")
     
-    print(f"\nWicks/Ticks (Task 4):")
-    print(f"  Total shots: {len(wicks):,}")
-    print(f"  Average execution score: {wick_avg:.2f}/4.0")
-    print(f"  Standard deviation: {wicks['Points'].std():.2f}")
+    print(f"\nWicks (Task 4):")
+    print(f"  Count: {len(wicks):,}")
+    print(f"  Avg Score: {wick_avg:.2f}/4.0")
+    print(f"  Std Dev: {wicks['Points'].std():.2f}")
     
-    # Calculate the difference
     if len(draws) > 0 and len(wicks) > 0:
         diff = draw_avg - wick_avg
-        pct_diff = (diff / wick_avg) * 100 if wick_avg > 0 else 0
-        print(f"\nDifference (Draw - Wick): {diff:+.2f} points")
-        print(f"Percentage difference: {pct_diff:+.1f}%")
-        print(f"  This is the 'Execution Gap' - Draws are {pct_diff:.1f}% more reliable")
+        pct = (diff / wick_avg) * 100
+        print(f"\nDifference: {diff:+.2f} points ({pct:+.1f}%)")
+        print(f"Execution Gap: Draws are {pct:.1f}% better")
     
     return draws, wicks
 
 
-def analyze_traffic_impact(stones_with_traffic, ends_df):
+def analyze_traffic_effect(stones_with_traffic, ends):
     """
-    Analyze how Traffic (house congestion) affects Power Play scoring.
-    
-    This is the key finding: when there are too many stones in the house,
-    Power Plays become less effective. We call this the "Traffic Tax."
-    
-    Args:
-        stones_with_traffic: DataFrame with Traffic already calculated
-        ends_df: DataFrame with end-level data
-    
-    Returns:
-        DataFrame with Traffic categories added
+    Analyze how Traffic affects Power Play scoring.
+    This is the Traffic Tax finding.
     """
     print("\n" + "="*70)
-    print("5. TRAFFIC IMPACT ON POWER PLAY SCORING")
+    print("5. TRAFFIC IMPACT ON POWER PLAYS")
     print("="*70)
     
-    # Merge stones data with ends data to get Power Play results
-    stones_merged = pd.merge(
+    # Merge to get results
+    merged = pd.merge(
         stones_with_traffic,
-        ends_df[['CompetitionID', 'SessionID', 'GameID', 'EndID', 'Result', 'PowerPlay']],
+        ends[['CompetitionID', 'SessionID', 'GameID', 'EndID', 'Result', 'PowerPlay']],
         on=['CompetitionID', 'SessionID', 'GameID', 'EndID'],
         how='inner'
     )
     
-    # Filter to only Power Play ends
-    pp_stones = stones_merged[
-        stones_merged['PowerPlay'].notna() & 
-        (stones_merged['PowerPlay'] > 0)
-    ].copy()
+    # Only Power Play ends
+    pp_stones = merged[merged['PowerPlay'].notna() & (merged['PowerPlay'] > 0)].copy()
     
-    # Categorize Traffic levels
-    # Low: 0-2 stones, Medium: 3-4 stones, High: 5+ stones
-    pp_stones['Traffic_Category'] = pd.cut(
-        pp_stones['Traffic'],
-        bins=[-1, 2, 4, 20],
-        labels=['Low Traffic (0-2)', 'Medium Traffic (3-4)', 'High Traffic (5+)']
+    # Categorize Traffic
+    def categorize_traffic(t):
+        if t <= 2:
+            return 'Low (0-2)'
+        elif t <= 4:
+            return 'Medium (3-4)'
+        else:
+            return 'High (5+)'
+    
+    pp_stones['TrafficCat'] = pp_stones['Traffic'].apply(categorize_traffic)
+    
+    # Stats by Traffic level
+    traffic_stats = pp_stones.groupby('TrafficCat')['Result'].agg(['mean', 'count'])
+    big_end_by_traffic = pp_stones.groupby('TrafficCat').apply(
+        lambda x: (x['Result'] >= 3).sum() / len(x) * 100
     )
     
-    # Calculate average points scored by Traffic category
-    scoring_by_traffic = pp_stones.groupby('Traffic_Category').agg({
-        'Result': ['mean', 'count'],
-    }).round(2)
+    print(f"\nTotal PP shots: {len(pp_stones):,}")
+    print("\nAverage Points by Traffic:")
+    print(traffic_stats['mean'].round(2))
+    print("\nCount by Traffic:")
+    print(traffic_stats['count'])
+    print("\nBig End Rate by Traffic:")
+    print(big_end_by_traffic.round(2))
     
-    # Calculate Big End rate by Traffic category
-    big_end_by_traffic = pp_stones.groupby('Traffic_Category').apply(
-        lambda x: (x['Result'] >= 3).sum() / len(x) * 100
-    ).round(2)
+    # Calculate Traffic Tax
+    low = pp_stones[pp_stones['TrafficCat'] == 'Low (0-2)']
+    high = pp_stones[pp_stones['TrafficCat'] == 'High (5+)']
     
-    # Print results
-    print(f"\nTotal Power Play shots analyzed: {len(pp_stones):,}")
-    print("\nAverage Points Scored by Traffic Level:")
-    print(scoring_by_traffic[('Result', 'mean')])
-    print("\nSample Size by Traffic Level:")
-    print(scoring_by_traffic[('Result', 'count')])
-    print("\nBig End Rate (% with Result >= 3) by Traffic:")
-    print(big_end_by_traffic)
-    
-    # Calculate the Traffic Tax (efficiency penalty from high Traffic)
-    low_traffic = pp_stones[pp_stones['Traffic_Category'] == 'Low Traffic (0-2)']
-    high_traffic = pp_stones[pp_stones['Traffic_Category'] == 'High Traffic (5+)']
-    
-    if len(low_traffic) > 0 and len(high_traffic) > 0:
-        avg_low = low_traffic['Result'].mean()
-        avg_high = high_traffic['Result'].mean()
-        
-        # Calculate percentage change
-        traffic_tax = ((avg_high - avg_low) / avg_low) * 100 if avg_low > 0 else 0
+    if len(low) > 0 and len(high) > 0:
+        low_avg = low['Result'].mean()
+        high_avg = high['Result'].mean()
+        tax = ((high_avg - low_avg) / low_avg) * 100
         
         print(f"\n" + "-" * 70)
-        print(f"TRAFFIC TAX ANALYSIS:")
-        print(f"Low Traffic (0-2 stones): {avg_low:.2f} points")
-        print(f"High Traffic (5+ stones): {avg_high:.2f} points")
-        print(f"Traffic Tax: {traffic_tax:+.1f}%")
+        print(f"TRAFFIC TAX:")
+        print(f"Low Traffic: {low_avg:.2f} points")
+        print(f"High Traffic: {high_avg:.2f} points")
+        print(f"Tax: {tax:+.1f}%")
         
-        if traffic_tax < 0:
-            print(f"\nKEY FINDING: High traffic REDUCES scoring efficiency by {abs(traffic_tax):.1f}%")
-            print(f"This quantifies the geometric penalty of house congestion.")
+        if tax < 0:
+            print(f"\nFinding: High traffic reduces efficiency by {abs(tax):.1f}%")
     
     return pp_stones
 
 
-def analyze_team_comparison(ends_df, stones_df):
-    """
-    Compare Power Play performance between different teams (GBR vs Italy).
-    
-    This helps us understand why some teams are better at Power Plays than others.
-    
-    Args:
-        ends_df: DataFrame with end-level data
-        stones_df: DataFrame with stone-level data
-    
-    Returns:
-        Dictionary with comparison statistics
-    """
+def compare_teams(ends, stones):
+    """Compare GBR vs Italy Power Play performance."""
     print("\n" + "="*70)
     print("6. TEAM COMPARISON: GBR vs Italy")
     print("="*70)
     
-    # Try to load teams data
+    # Try to load teams
     try:
         teams = pd.read_csv(os.path.join(DATA_DIR, "Teams.csv"))
     except:
-        print("Teams.csv not found - cannot identify GBR/Italy teams")
+        print("Couldn't load Teams.csv")
         return None
     
-    # Find GBR and Italy team IDs
-    gbr_teams = teams[teams['NOC'] == 'GBR']
-    ita_teams = teams[teams['NOC'] == 'ITA']
+    # Find team IDs
+    gbr_ids = teams[teams['NOC'] == 'GBR']['TeamID'].unique().tolist()
+    ita_ids = teams[teams['NOC'] == 'ITA']['TeamID'].unique().tolist()
     
-    if gbr_teams.empty or ita_teams.empty:
-        print("GBR or Italy teams not found in dataset")
+    if len(gbr_ids) == 0 or len(ita_ids) == 0:
+        print("GBR or Italy teams not found")
         return None
     
-    gbr_team_ids = gbr_teams['TeamID'].unique().tolist()
-    ita_team_ids = ita_teams['TeamID'].unique().tolist()
+    print(f"\nGBR teams: {len(gbr_ids)}")
+    print(f"Italy teams: {len(ita_ids)}")
     
-    print(f"\nGBR Teams Found: {len(gbr_team_ids)}")
-    print(f"Italy Teams Found: {len(ita_team_ids)}")
+    # Get Power Play ends
+    pp = ends[ends['PowerPlay'].notna() & (ends['PowerPlay'] > 0)].copy()
     
-    # Filter to Power Play ends
-    pp_ends = ends_df[ends_df['PowerPlay'].notna() & (ends_df['PowerPlay'] > 0)].copy()
-    
-    gbr_pp = pp_ends[pp_ends['TeamID'].isin(gbr_team_ids)]
-    ita_pp = pp_ends[pp_ends['TeamID'].isin(ita_team_ids)]
+    gbr_pp = pp[pp['TeamID'].isin(gbr_ids)]
+    ita_pp = pp[pp['TeamID'].isin(ita_ids)]
     
     print("\n" + "-" * 70)
-    print("POWER PLAY PERFORMANCE COMPARISON:")
+    print("Performance Comparison:")
     print("-" * 70)
     
-    # GBR statistics
+    # GBR stats
     if len(gbr_pp) > 0:
         gbr_avg = gbr_pp['Result'].mean()
-        gbr_big_end = (gbr_pp['Result'] >= 3).sum() / len(gbr_pp) * 100
+        gbr_big = (gbr_pp['Result'] >= 3).sum() / len(gbr_pp) * 100
         gbr_std = gbr_pp['Result'].std()
-        print(f"\nGBR Power Play Performance:")
-        print(f"  Sample Size: {len(gbr_pp)}")
-        print(f"  Average Points: {gbr_avg:.2f}")
-        print(f"  Big End Rate (3+): {gbr_big_end:.1f}%")
-        print(f"  Standard Deviation: {gbr_std:.2f}")
+        print(f"\nGBR:")
+        print(f"  Sample: {len(gbr_pp)}")
+        print(f"  Avg Points: {gbr_avg:.2f}")
+        print(f"  Big End Rate: {gbr_big:.1f}%")
+        print(f"  Std Dev: {gbr_std:.2f}")
     else:
         gbr_avg = 0
-        gbr_big_end = 0
+        gbr_big = 0
         gbr_std = 0
-        print("\nGBR: No Power Play data found")
+        print("\nGBR: No data")
     
-    # Italy statistics
+    # Italy stats
     if len(ita_pp) > 0:
         ita_avg = ita_pp['Result'].mean()
-        ita_big_end = (ita_pp['Result'] >= 3).sum() / len(ita_pp) * 100
+        ita_big = (ita_pp['Result'] >= 3).sum() / len(ita_pp) * 100
         ita_std = ita_pp['Result'].std()
-        print(f"\nItaly Power Play Performance:")
-        print(f"  Sample Size: {len(ita_pp)}")
-        print(f"  Average Points: {ita_avg:.2f}")
-        print(f"  Big End Rate (3+): {ita_big_end:.1f}%")
-        print(f"  Standard Deviation: {ita_std:.2f}")
+        print(f"\nItaly:")
+        print(f"  Sample: {len(ita_pp)}")
+        print(f"  Avg Points: {ita_avg:.2f}")
+        print(f"  Big End Rate: {ita_big:.1f}%")
+        print(f"  Std Dev: {ita_std:.2f}")
     else:
         ita_avg = 0
-        ita_big_end = 0
+        ita_big = 0
         ita_std = 0
-        print("\nItaly: No Power Play data found")
+        print("\nItaly: No data")
     
     return {
         'gbr_avg': gbr_avg,
         'ita_avg': ita_avg,
-        'gbr_big_end': gbr_big_end,
-        'ita_big_end': ita_big_end,
         'gbr_std': gbr_std,
-        'ita_std': ita_std,
-        'gbr_n': len(gbr_pp),
-        'ita_n': len(ita_pp)
+        'ita_std': ita_std
     }
 
 
-def create_visualization(ends_df):
-    """
-    Create a bar chart showing Power Play effectiveness by end number.
-    
-    This visualization helps us see the pattern: Power Plays are more effective
-    in later ends (especially End 8).
-    
-    Args:
-        ends_df: DataFrame with end-level data
-    """
+def make_plot(ends):
+    """Create bar chart of Power Play effectiveness by end."""
     print("\n" + "="*70)
-    print("7. VISUALIZATION: Power Play Success by End")
+    print("7. VISUALIZATION")
     print("="*70)
     
-    # Filter to Power Play ends
-    pp_ends = ends_df[ends_df['PowerPlay'].notna() & (ends_df['PowerPlay'] > 0)].copy()
+    # Get Power Play ends
+    pp = ends[ends['PowerPlay'].notna() & (ends['PowerPlay'] > 0)].copy()
     
-    # Group by end and calculate statistics
-    by_end = pp_ends.groupby('EndID').agg({
+    # Group by end
+    by_end = pp.groupby('EndID').agg({
         'Result': ['mean', 'count', 'std']
     }).reset_index()
     by_end.columns = ['EndID', 'AvgPoints', 'Count', 'StdDev']
     
-    # Create the bar chart
-    plt.figure(figsize=(10, 6))
-    bars = plt.bar(by_end['EndID'], by_end['AvgPoints'], 
-                   yerr=by_end['StdDev'].fillna(0),
-                   capsize=5, alpha=0.7, color='steelblue', edgecolor='black')
+    # Make plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bars = ax.bar(by_end['EndID'], by_end['AvgPoints'], 
+                  yerr=by_end['StdDev'].fillna(0),
+                  capsize=5, alpha=0.7, color='steelblue', edgecolor='black')
     
-    # Add labels and title
-    plt.xlabel('End Number', fontsize=12, fontweight='bold')
-    plt.ylabel('Average Points Scored', fontsize=12, fontweight='bold')
-    plt.title('Power Play Effectiveness by End Number', fontsize=14, fontweight='bold')
-    plt.xticks(range(1, 9))
-    plt.grid(axis='y', alpha=0.3, linestyle='--')
+    ax.set_xlabel('End Number', fontsize=12, fontweight='bold')
+    ax.set_ylabel('Average Points Scored', fontsize=12, fontweight='bold')
+    ax.set_title('Power Play Effectiveness by End Number', fontsize=14, fontweight='bold')
+    ax.set_xticks(range(1, 9))
+    ax.grid(axis='y', alpha=0.3, linestyle='--')
     
-    # Add sample size labels on bars
-    for i, (end, count, avg) in enumerate(zip(by_end['EndID'], by_end['Count'], by_end['AvgPoints'])):
-        plt.text(end, avg + by_end['StdDev'].iloc[i] + 0.05, 
-                f'n={count}', ha='center', va='bottom', fontsize=9)
+    # Add count labels
+    for i in range(len(by_end)):
+        end = by_end.iloc[i]
+        ax.text(end['EndID'], end['AvgPoints'] + end['StdDev'] + 0.05,
+                f'n={int(end["Count"])}', ha='center', va='bottom', fontsize=9)
     
     plt.tight_layout()
     
-    # Save the figure
-    output_path = os.path.join(DATA_DIR, 'power_play_by_end.png')
-    plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"\nVisualization saved to: {output_path}")
+    # Save
+    out_path = os.path.join(DATA_DIR, 'power_play_by_end.png')
+    plt.savefig(out_path, dpi=300, bbox_inches='tight')
+    print(f"\nSaved to: {out_path}")
     plt.close()
 
 
-# ============================================================================
-# MAIN FUNCTION
-# ============================================================================
-
 def main():
-    """
-    Main function that runs all the analyses.
-    
-    This is the entry point of the script. It:
-    1. Loads the data
-    2. Runs all analysis functions
-    3. Prints a summary of key findings
-    """
+    """Main function to run all analyses."""
     print("="*70)
-    print("CSAS 2026 CURLING DATA CHALLENGE - STRATEGIC ANALYSIS")
-    print("Power Play Deployment Analysis")
+    print("CSAS 2026 CURLING ANALYSIS")
+    print("Power Play Strategy Analysis")
     print("="*70)
     
-    # Step 1: Load the data
+    # Load data
     print("\nLoading data...")
     stones, ends = load_data()
-    print(f"Loaded {len(stones):,} stone records and {len(ends):,} end records")
+    print(f"Loaded {len(stones):,} shots and {len(ends):,} ends")
     
-    # Step 2: Calculate Traffic (house congestion)
-    stones_with_traffic = calculate_traffic(stones)
+    # Run analyses
+    stones_traffic = calculate_traffic(stones)
+    early_pprs = calculate_pprs(stones, ends)
+    pp_deployment = analyze_deployment(ends)
+    draws, wicks = analyze_shot_types(stones)
+    traffic_analysis = analyze_traffic_effect(stones_traffic, ends)
+    team_comp = compare_teams(ends, stones)
+    make_plot(ends)
     
-    # Step 3: Calculate Power Play Readiness Score for early ends
-    early_ends_pprs = calculate_power_play_readiness_score(stones, ends)
-    
-    # Step 4: Analyze Power Play deployment patterns
-    pp_analysis = analyze_power_play_deployment(ends)
-    
-    # Step 5: Compare shot accuracy (Draws vs Wicks)
-    draws, wicks = analyze_shot_accuracy(stones)
-    
-    # Step 6: Analyze how Traffic affects Power Play scoring
-    traffic_analysis = analyze_traffic_impact(stones_with_traffic, ends)
-    
-    # Step 7: Compare team performance (GBR vs Italy)
-    team_comparison = analyze_team_comparison(ends, stones)
-    
-    # Step 8: Create visualization
-    create_visualization(ends)
-    
-    # Print final summary
+    # Summary
     print("\n" + "="*70)
     print("ANALYSIS COMPLETE")
     print("="*70)
-    print("\nKey Metrics Summary:")
-    print(f"  - Average Traffic: {stones_with_traffic['Traffic'].mean():.2f} stones in house")
-    print(f"  - Average PPRS (Ends 1-2): {early_ends_pprs['PPRS'].mean():.2f} center corridor stones")
-    print(f"  - Total Power Plays analyzed: {len(pp_analysis)}")
-    print(f"  - Draw accuracy: {draws['Points'].mean():.2f}/4.0")
-    print(f"  - Wick accuracy: {wicks['Points'].mean():.2f}/4.0")
+    print("\nKey Findings:")
+    print(f"  Avg Traffic: {stones_traffic['Traffic'].mean():.2f}")
+    print(f"  Total Power Plays: {len(pp_deployment)}")
+    print(f"  Draw accuracy: {draws['Points'].mean():.2f}/4.0")
+    print(f"  Wick accuracy: {wicks['Points'].mean():.2f}/4.0")
     
-    # Calculate execution gap
-    execution_gap = draws['Points'].mean() - wicks['Points'].mean()
-    execution_gap_pct = (execution_gap / wicks['Points'].mean()) * 100
-    print(f"  - Execution Gap: {execution_gap:.2f} points ({execution_gap_pct:.1f}%)")
+    gap = draws['Points'].mean() - wicks['Points'].mean()
+    gap_pct = (gap / wicks['Points'].mean()) * 100
+    print(f"  Execution Gap: {gap:.2f} points ({gap_pct:.1f}%)")
 
-
-# ============================================================================
-# RUN THE SCRIPT
-# ============================================================================
 
 if __name__ == "__main__":
     main()
