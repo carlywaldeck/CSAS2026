@@ -483,6 +483,134 @@ def calculate_high_congestion_failure_rates(stones_with_csi):
     }
 
 
+def analyze_gbr_vs_italy(ends_df, teams_df, stones_df):
+    """
+    Deep analysis comparing GBR and Italy Power Play performance.
+    Explains why GBR executes Power Plays better than Italy.
+    """
+    print("\n" + "="*70)
+    print("GBR vs ITALY POWER PLAY ANALYSIS")
+    print("="*70)
+    
+    # Load teams data if available
+    try:
+        teams = pd.read_csv(os.path.join(DATA_DIR, "Teams.csv"))
+    except:
+        teams = teams_df if teams_df is not None else pd.DataFrame()
+    
+    if teams.empty:
+        print("Teams.csv not found - cannot identify GBR/Italy teams")
+        return None
+    
+    # Find GBR and Italy TeamIDs
+    gbr_teams = teams[teams['NOC'] == 'GBR']
+    ita_teams = teams[teams['NOC'] == 'ITA']
+    
+    if gbr_teams.empty or ita_teams.empty:
+        print("GBR or Italy teams not found in dataset")
+        return None
+    
+    gbr_team_ids = gbr_teams['TeamID'].unique().tolist()
+    ita_team_ids = ita_teams['TeamID'].unique().tolist()
+    
+    print(f"\nGBR Teams Found: {len(gbr_team_ids)}")
+    print(f"Italy Teams Found: {len(ita_team_ids)}")
+    
+    # Filter to Power Play ends for each team
+    pp_ends = ends_df[ends_df['PowerPlay'].notna() & (ends_df['PowerPlay'] > 0)].copy()
+    
+    gbr_pp = pp_ends[pp_ends['TeamID'].isin(gbr_team_ids)]
+    ita_pp = pp_ends[pp_ends['TeamID'].isin(ita_team_ids)]
+    
+    print("\n" + "-" * 70)
+    print("POWER PLAY PERFORMANCE COMPARISON:")
+    print("-" * 70)
+    
+    if len(gbr_pp) > 0:
+        gbr_avg = gbr_pp['Result'].mean()
+        gbr_big_end = (gbr_pp['Result'] >= 3).sum() / len(gbr_pp) * 100
+        print(f"\nGBR Power Play Performance:")
+        print(f"  Sample Size: {len(gbr_pp)}")
+        print(f"  Average Points: {gbr_avg:.2f}")
+        print(f"  Big End Rate (3+): {gbr_big_end:.1f}%")
+        print(f"  Standard Deviation: {gbr_pp['Result'].std():.2f}")
+    else:
+        gbr_avg = 0
+        gbr_big_end = 0
+        print("\nGBR: No Power Play data found")
+    
+    if len(ita_pp) > 0:
+        ita_avg = ita_pp['Result'].mean()
+        ita_big_end = (ita_pp['Result'] >= 3).sum() / len(ita_pp) * 100
+        print(f"\nItaly Power Play Performance:")
+        print(f"  Sample Size: {len(ita_pp)}")
+        print(f"  Average Points: {ita_avg:.2f}")
+        print(f"  Big End Rate (3+): {ita_big_end:.1f}%")
+        print(f"  Standard Deviation: {ita_pp['Result'].std():.2f}")
+    else:
+        ita_avg = 0
+        ita_big_end = 0
+        print("\nItaly: No Power Play data found")
+    
+    # Execution analysis - compare shot types
+    if not stones_df.empty:
+        print("\n" + "-" * 70)
+        print("EXECUTION ANALYSIS:")
+        print("-" * 70)
+        
+        # Merge stones with ends to get team context
+        stones_with_teams = pd.merge(
+            stones_df,
+            ends_df[['CompetitionID', 'SessionID', 'GameID', 'EndID', 'TeamID', 'PowerPlay']],
+            on=['CompetitionID', 'SessionID', 'GameID', 'EndID'],
+            how='inner'
+        )
+        
+        # Filter to Power Play shots only
+        pp_stones = stones_with_teams[
+            stones_with_teams['PowerPlay'].notna() & 
+            (stones_with_teams['PowerPlay'] > 0)
+        ].copy()
+        
+        gbr_pp_stones = pp_stones[pp_stones['TeamID'].isin(gbr_team_ids)]
+        ita_pp_stones = pp_stones[pp_stones['TeamID'].isin(ita_team_ids)]
+        
+        # Compare Draw execution (Task 0)
+        gbr_draws = gbr_pp_stones[gbr_pp_stones['Task'] == 0]
+        ita_draws = ita_pp_stones[ita_pp_stones['Task'] == 0]
+        
+        if len(gbr_draws) > 0 and len(ita_draws) > 0:
+            print(f"\nDraw Execution (Task 0):")
+            print(f"  GBR: {gbr_draws['Points'].mean():.2f}/4.0 (n={len(gbr_draws)})")
+            print(f"  Italy: {ita_draws['Points'].mean():.2f}/4.0 (n={len(ita_draws)})")
+            draw_diff = gbr_draws['Points'].mean() - ita_draws['Points'].mean()
+            print(f"  GBR Advantage: {draw_diff:+.2f} points")
+        
+        # Compare shot selection mix
+        print(f"\nShot Selection Mix (Power Play ends):")
+        gbr_tasks = gbr_pp_stones['Task'].value_counts(normalize=True) * 100
+        ita_tasks = ita_pp_stones['Task'].value_counts(normalize=True) * 100
+        
+        print(f"\nGBR Shot Distribution:")
+        for task, pct in gbr_tasks.head(5).items():
+            task_name = {0: "Draw", 4: "Wick", 6: "Takeout", 3: "Raise"}.get(task, f"Task {task}")
+            print(f"  {task_name}: {pct:.1f}%")
+        
+        print(f"\nItaly Shot Distribution:")
+        for task, pct in ita_tasks.head(5).items():
+            task_name = {0: "Draw", 4: "Wick", 6: "Takeout", 3: "Raise"}.get(task, f"Task {task}")
+            print(f"  {task_name}: {pct:.1f}%")
+    
+    return {
+        'gbr_avg': gbr_avg if len(gbr_pp) > 0 else 0,
+        'ita_avg': ita_avg if len(ita_pp) > 0 else 0,
+        'gbr_big_end': gbr_big_end if len(gbr_pp) > 0 else 0,
+        'ita_big_end': ita_big_end if len(ita_pp) > 0 else 0,
+        'gbr_n': len(gbr_pp),
+        'ita_n': len(ita_pp)
+    }
+
+
 def analyze_usa_performance(ends_df):
     """
     Analyze Team USA-specific Power Play performance including:
@@ -591,6 +719,14 @@ def main():
     csi_big_end = calculate_csi_big_end_relationship(stones_with_csi, ends)
     failure_rates = calculate_high_congestion_failure_rates(stones_with_csi)
     usa_analysis = analyze_usa_performance(ends)
+    
+    # Try to load teams data for GBR vs Italy analysis
+    try:
+        teams = pd.read_csv(os.path.join(DATA_DIR, "Teams.csv"))
+    except:
+        teams = None
+    
+    gbr_ita_analysis = analyze_gbr_vs_italy(ends, teams, stones)
     visualize_power_play_success_by_end(ends)
     
     print("\n" + "="*70)
