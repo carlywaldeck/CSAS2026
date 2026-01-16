@@ -241,7 +241,215 @@ Based on our analysis, we provide the following tactical guideline:
 
 For most teams, the data validates the "Insurance Closer" model: save the Power Play for End 8, where efficiency peaks at $2.51$ points and game state leverage is maximized.
 
-### 6.3 Practical Guidelines for Team USA
+### 6.3 Team USA Strategic Analysis: First Half vs. Second Half Power Play Deployment
+
+#### 6.3.1 When Team USA Can Use Power Play in the First Half
+
+**First Half Deployment Criteria (Ends 1-4):**
+
+Team USA should consider first-half Power Play deployment when:
+
+1. **Opponent Profile Matchup:**
+   - Facing technical teams (like GBR) that rely on conservative, low-variance play
+   - Opponent has demonstrated low Big End rate ($< 15\%$) in previous ends
+   - Early disruption can force opponent into uncomfortable aggressive posture
+
+2. **Game State Conditions:**
+   - Starting with hammer in End 1 (LSFE = 1)
+   - Opponent's first shot is likely to be a guard or takeout (not a draw into house)
+   - Game state suggests Traffic will remain manageable ($< 3$ stones) during execution
+
+3. **Pair Characteristics:**
+   - Power Hitting pair profile (comfortable with variance, high execution ceiling)
+   - Strong takeout ability to manage Traffic if congestion develops
+   - Confidence in draw weight execution ($\geq 3.0/4.0$ average)
+
+4. **Strategic Context:**
+   - Need to break opponent's "Stability Cycle" early in the match
+   - Building early lead would provide psychological and tactical advantage
+   - Willing to accept opportunity cost of not having Power Play available for End 8
+
+#### 6.3.2 Pros and Cons: First Half vs. Second Half Power Play Deployment
+
+**First Half Deployment (Ends 1-4) - PROS:**
+
+1. **Psychological Advantage:**
+   - Early multi-point lead forces opponent into "chase mode" for remaining ends
+   - Disrupts technical teams' conservative game plan before it's established
+   - Creates momentum and sets aggressive tactical tone
+
+2. **Variance Injection:**
+   - Forces opponent into high-variance scenarios they're ill-equipped to manage
+   - Neutralizes precision advantages of technically superior teams
+   - Creates geometric mismatches that favor USA's execution ceiling
+
+3. **Early Lead Compound Effect:**
+   - $3+$ point lead in End 1-2 provides cushion for remaining ends
+   - Opponent must take higher risks to recover, increasing defensive errors
+   - USA can shift to "Stability Mode" (conservative play) while opponent chases
+
+4. **Information Asymmetry Reduction:**
+   - Early deployment doesn't require waiting for ice condition information
+   - Standard ice conditions in early ends are more predictable
+   - Reduces uncertainty compared to late-game ice variability
+
+**First Half Deployment (Ends 1-4) - CONS:**
+
+1. **Opportunity Cost:**
+   - Sacrifices End 8 Power Play option where efficiency peaks at $2.51$ points
+   - Cannot deploy Power Play in critical late-game scenarios
+   - Loses insurance policy for End 8 when trailing by 1-2 points
+
+2. **Traffic Uncertainty:**
+   - Cannot observe Traffic before declaring Power Play
+   - Early ends may have unpredictable congestion patterns
+   - Opponent's first shot could create unexpected Traffic escalation
+
+3. **Execution Risk:**
+   - Ice conditions not fully understood in early ends
+   - Player calibration may not be established
+   - Higher variance in execution quality before players are "warmed up"
+
+4. **Strategic Reversibility:**
+   - If early Power Play fails (scores $0-1$ points), team has no recovery option
+   - Cannot "undo" the decision if game state changes
+   - Commits to aggressive strategy for entire match
+
+**Second Half Deployment (Ends 5-8) - PROS:**
+
+1. **Efficiency Maximization:**
+   - End 8 averages $2.51$ points (highest efficiency across all ends)
+   - End 7 averages $1.67$ points (pre-closer efficiency)
+   - Data validates late-game deployment as optimal for scoring
+
+2. **Information Advantage:**
+   - Seven ends of play reveal ice conditions, curl, and speed
+   - Opponent tendencies and shot preferences are established
+   - Player calibration is refined through previous ends
+
+3. **Leverage Maximization:**
+   - End 8 decisions directly determine match outcomes
+   - Power Play provides insurance when trailing by 1-2 points
+   - Can force extra ends or secure victory in critical moments
+
+4. **Traffic Management:**
+   - Game state patterns are established, allowing better Traffic prediction
+   - Opponent's shot selection tendencies are known
+   - Can anticipate congestion patterns based on previous ends
+
+**Second Half Deployment (Ends 5-8) - CONS:**
+
+1. **Missed Early Opportunity:**
+   - Cannot build early lead that forces opponent into chase mode
+   - Loses psychological advantage of early multi-point lead
+   - Technical teams can establish conservative rhythm
+
+2. **Reduced Variance Impact:**
+   - Opponent has already adapted to game conditions
+   - Less disruptive effect compared to early deployment
+   - Technical teams have settled into comfortable patterns
+
+3. **Late-Game Pressure:**
+   - End 8 Power Play carries maximum pressure
+   - Failure in End 8 is catastrophic (no recovery opportunity)
+   - All-or-nothing scenario increases execution stress
+
+#### 6.3.3 Team USA Steal Rate Analysis
+
+**Defensive Power Play Performance:**
+
+When Team USA does NOT have hammer and faces opponent's Power Play:
+
+**Steal Rate Statistics:**
+- USA steal rate against opponent Power Plays: [To be calculated from data]
+- Opponent Power Play efficiency when facing USA: [To be calculated]
+- USA's ability to force single points (1 point or steal) against Power Plays: [To be calculated]
+
+**Defensive Strategy Against Power Plays:**
+
+1. **Traffic Creation:**
+   - Place first stone in center corridor ($x \approx 750$, $y > 1500$) to close lanes
+   - Elevate Traffic to $5+$ stones to impose $-12.3\%$ efficiency penalty
+   - Force opponent into execution-dependent shots with higher failure rates
+
+2. **Force Probability Maximization:**
+   - Target: Force opponent to score only 1 point (or steal)
+   - Maintain center corridor congestion throughout the end
+   - Block corner guard angles to prevent clean draws behind guards
+
+3. **Geometric Obstruction:**
+   - Position stones to interfere with Power Play's corner guard advantages
+   - Create obstacles that force lower-probability shot selections
+   - Exploit Traffic Tax to neutralize opponent's geometric benefits
+
+**Offensive Power Play Performance:**
+
+When Team USA HAS hammer and deploys Power Play:
+
+**Scoring Efficiency:**
+- USA Power Play average: [To be calculated from data]
+- USA Big End rate (3+ points) on Power Plays: [To be calculated]
+- USA execution quality on Power Plays: [To be calculated]
+
+**Offensive Strategy with Power Play:**
+
+1. **Traffic Management:**
+   - Actively clear opponent stones early in the end to maintain low Traffic
+   - Prevent Traffic escalation above $5$ stones to avoid efficiency penalty
+   - Maintain lane clarity in center corridor ($|x - 750| < 200$)
+
+2. **Execution Optimization:**
+   - Prioritize Draws (Task 0) for $3.13/4.0$ execution floor
+   - Use takeouts (Task 6) for Traffic management when needed
+   - Avoid Wicks/Ticks (Task 4) unless geometrically necessary
+
+3. **Scoring Maximization:**
+   - Leverage Power Play's geometric advantages (corner guards)
+   - Target $3+$ point "Big Ends" when game state allows
+   - Maintain execution floor through standard draw weight
+
+#### 6.3.4 Defensive vs. Offensive Power Play Modes
+
+**Defensive Mode (Stability):**
+
+**When to Use:**
+- Leading by 1-2 points in Ends 7-8
+- Goal: Prevent steal, ensure at least 1 point scored
+- Priority: Execution reliability over scoring ceiling
+
+**Tactical Approach:**
+- Conservative shot selection (Draws over Wicks)
+- Traffic management to prevent opponent steals
+- Minimize variance, maximize execution floor
+- Target: Score 1-2 points, prevent opponent from stealing
+
+**Key Stat:** Defensive Power Play usage should reduce opponent's steal probability while ensuring minimum 1-point scoring.
+
+**Offensive Mode (Scoring Max):**
+
+**When to Use:**
+- Trailing by 2+ points
+- First Strike deployment (End 1-2) to build early lead
+- Need to break opponent's stability cycle
+
+**Tactical Approach:**
+- Aggressive shot selection when geometrically favorable
+- Target $3+$ point "Big Ends"
+- Accept higher variance for ceiling outcomes
+- Leverage USA's execution ceiling advantage
+
+**Key Stat:** Offensive Power Play usage increases Big End frequency and creates early leads that force opponent into chase mode.
+
+**Mode Selection Framework:**
+
+| Game State | Mode | Power Play Timing | Objective |
+|------------|------|-------------------|-----------|
+| Trailing by 2+ | Offensive | First Half (End 1-2) or End 7-8 | Score 3+ points, break deficit |
+| Leading by 1-2 | Defensive | End 7-8 only | Score 1-2 points, prevent steal |
+| Tied game | Offensive | End 8 | Score 2+ points, secure victory |
+| Leading by 3+ | Defensive | End 7-8 | Score 1 point, maintain lead |
+
+### 6.4 Practical Guidelines for Team USA
 
 **Traffic Management Protocol:**
 Since Power Plays must be declared before the end starts, teams cannot wait to observe Traffic. However, during Power Play execution:
@@ -259,7 +467,7 @@ Since Power Plays must be declared before the end starts, teams cannot wait to o
 **Pair-Specific Profiling:**
 - Profile individual pairs to identify Power Hitting vs. Contact Hitting characteristics
 - Match deployment strategy to pair profile: Power Hitters may benefit from early First Strike, Contact Hitters should use Insurance Closer
-- Use early First Strike only for Power Hitting pairs when Traffic is low ($< 3$ stones)
+- Use early First Strike only for Power Hitting pairs when game state suggests low Traffic likelihood
 
 ### 6.4 Limitations and Future Research
 

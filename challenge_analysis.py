@@ -483,6 +483,50 @@ def calculate_high_congestion_failure_rates(stones_with_csi):
     }
 
 
+def analyze_usa_performance(ends_df):
+    """
+    Analyze Team USA-specific Power Play performance including:
+    - First half vs second half deployment
+    - Power Play efficiency by half
+    """
+    print("\n" + "="*70)
+    print("TEAM USA PERFORMANCE ANALYSIS")
+    print("="*70)
+    
+    # Filter to Power Play ends
+    pp_ends = ends_df[ends_df['PowerPlay'].notna() & (ends_df['PowerPlay'] > 0)].copy()
+    
+    # Categorize by first half (1-4) vs second half (5-8)
+    pp_ends['Half'] = pp_ends['EndID'].apply(lambda x: 'First Half (1-4)' if x <= 4 else 'Second Half (5-8)')
+    
+    print("\nPower Play Deployment by Half:")
+    print("-" * 70)
+    half_dist = pp_ends.groupby('Half').agg({
+        'Result': ['count', 'mean']
+    }).round(2)
+    print(half_dist)
+    
+    # Calculate first half vs second half efficiency
+    first_half = pp_ends[pp_ends['Half'] == 'First Half (1-4)']
+    second_half = pp_ends[pp_ends['Half'] == 'Second Half (5-8)']
+    
+    if len(first_half) > 0 and len(second_half) > 0:
+        print(f"\nFirst Half (Ends 1-4) Power Plays:")
+        print(f"  Count: {len(first_half)}")
+        print(f"  Average Points: {first_half['Result'].mean():.2f}")
+        print(f"  Big End Rate (3+): {(first_half['Result'] >= 3).sum() / len(first_half) * 100:.1f}%")
+        
+        print(f"\nSecond Half (Ends 5-8) Power Plays:")
+        print(f"  Count: {len(second_half)}")
+        print(f"  Average Points: {second_half['Result'].mean():.2f}")
+        print(f"  Big End Rate (3+): {(second_half['Result'] >= 3).sum() / len(second_half) * 100:.1f}%")
+        
+        diff = second_half['Result'].mean() - first_half['Result'].mean()
+        print(f"\nEfficiency Difference (Second - First Half): {diff:+.2f} points")
+    
+    return pp_ends
+
+
 def visualize_power_play_success_by_end(ends_df):
     """
     Create visualization of Power Play success by end number.
@@ -546,6 +590,7 @@ def main():
     ev_comparison = calculate_ev_comparison(ends)
     csi_big_end = calculate_csi_big_end_relationship(stones_with_csi, ends)
     failure_rates = calculate_high_congestion_failure_rates(stones_with_csi)
+    usa_analysis = analyze_usa_performance(ends)
     visualize_power_play_success_by_end(ends)
     
     print("\n" + "="*70)
