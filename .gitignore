@@ -1,0 +1,52 @@
+# CSV Data Files (per challenge requirements - do not include in submission)
+*.csv
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary/development files
+*.log
+*.tmp
+
+# Archive folders (old code)
+archive_v1/
+archive_old_docs/
+
+# Planning/development documents (not needed in submission)
+CLEANUP_COMMANDS.md
+COMPLETE_WORK_SUMMARY.md
+FACTUAL_APPROACH_SUMMARY.md
+FINAL_MASTER_PROMPT.md
+NEXT_STEPS.md
+SESSION_REPORT.md
+SUBMISSION_CHECKLIST.md
+
+# Old report versions (keep only final)
+CSAS2026_Final_Report.md
+Report_v2.md
+Executive_Summary_v2.md
+Dissertation_v2.md
+Final_Submission_Sections.md
+Results_Discussion_Sections.md
+Results_Section_Factual.md
+Scouting_Report_Framework.md
