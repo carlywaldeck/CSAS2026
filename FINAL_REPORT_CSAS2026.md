@@ -12,7 +12,7 @@ Coach Phil Lazar posed a question that has lingered in the strategic consciousne
 
 Our analysis of **$26,370$ stone records** and **$5,274$ ends** from international Mixed Doubles competition reveals a fundamental tension between two strategic philosophies: **Aggression** (deploying the Power Play early to build a lead) versus **Insurance** (conserving the resource for the critical final end). The data demonstrates that elite teams have reached near-unanimous consensus: out of $5,274$ ends analyzed, only **$1$ instance** ($0.02\%$) utilized a Power Play in Ends 1-2. This "Conservation Deadlock" suggests that coaches view early deployment as prohibitively risky.
 
-Our key discovery is the **Traffic Tax**: congestion in the house creates a geometric penalty that systematically reduces Power Play efficiency. When Traffic exceeds $5$ stones, scoring drops from $1.69$ points (low traffic) to $1.48$ points (high traffic)—a **$-12.3\%$ efficiency penalty**. This finding explains why teams wait: they are waiting for "Clean Ice" to maximize the Power Play's geometric advantages.
+Our key discovery is the **Traffic Tax**: congestion in the house creates a geometric penalty that systematically reduces Power Play efficiency. When Traffic exceeds $5$ stones, scoring drops from $1.69$ points (low traffic) to $1.48$ points (high traffic)—a **$-12.3\%$ efficiency penalty**. This finding explains why Power Plays fail: high traffic develops during the end, closing lanes and reducing execution probability.
 
 The report concludes that early Power Play deployment is a high-risk gamble that should only be considered by high-execution "Power Hitting" pairs when Traffic is low ($< 3$ stones). For most teams, the data validates the "Insurance Closer" model: save the Power Play for End 8, where efficiency peaks at **$2.51$ points**.
 
@@ -126,9 +126,18 @@ The Power Play's strategic value derives from pre-placed corner guards positione
 
 The $12.3\%$ penalty quantifies the systematic cost of congestion: high traffic neutralizes the Power Play's geometric advantages, forcing teams into lower-probability shot selections.
 
-### 3.5 Why Teams Wait
+### 3.5 Traffic Management During Power Play Execution
 
-The Traffic Tax explains why elite teams conserve the Power Play: they are waiting for "Clean Ice" to maximize efficiency. By deploying the Power Play when Traffic is low ($< 3$ stones), teams preserve the geometric advantages that enable high-probability scoring sequences. The decision rule becomes clear: if Traffic $> 5$ stones, do not use the Power Play—"clear the bases" first to reduce congestion.
+**Critical Constraint:** Power Plays must be declared BEFORE the end starts—teams cannot wait to observe traffic levels. However, Traffic develops DURING the end as stones are thrown, and this congestion directly impacts Power Play efficiency.
+
+The Traffic Tax explains why some Power Plays succeed while others fail: when Traffic remains low ($< 3$ stones) throughout the end, teams preserve geometric advantages. When Traffic escalates to $5+$ stones, the $-12.3\%$ efficiency penalty neutralizes the Power Play's benefits.
+
+**Tactical Implication:** During Power Play execution, teams must actively manage Traffic by:
+- Clearing opponent stones from the center corridor early in the end
+- Maintaining lane clarity to prevent congestion escalation
+- Prioritizing takeouts when Traffic approaches $5$ stones
+
+The decision to declare a Power Play should consider the likelihood of maintaining low Traffic, not the ability to observe it beforehand.
 
 ---
 
@@ -207,12 +216,18 @@ This pairing variance explains why a one-size-fits-all strategy doesn't apply: t
 
 Based on our analysis, we provide the following tactical guideline:
 
-**Do NOT deploy the Power Play if Traffic $> 5$ stones.** The $-12.3\%$ efficiency penalty neutralizes the Power Play's geometric advantages. Instead, "Clear the bases"—remove opponent stones from the center corridor ($|x - 750| < 200$) to reduce Traffic before deploying Power Play stones.
+**Critical Constraint:** Power Plays must be declared BEFORE the end starts. Teams cannot observe Traffic levels before making the decision. However, Traffic develops DURING the end and directly impacts Power Play efficiency.
+
+**Decision Framework:** When considering whether to declare a Power Play, assess the likelihood that Traffic will remain low ($< 3$ stones) or can be managed during execution. If game state suggests Traffic will escalate to $5+$ stones during the end, the $-12.3\%$ efficiency penalty may neutralize the Power Play's advantages.
+
+**During Power Play Execution:** Actively manage Traffic by clearing opponent stones from the center corridor ($|x - 750| < 200$) early in the end to prevent congestion escalation.
 
 **Deploy the Power Play when:**
-1. Traffic is low ($< 3$ stones) or can be reduced early in the end
+1. Game state suggests Traffic can be maintained low ($< 3$ stones) during execution (e.g., opponent's first shot is likely to be cleared, not a draw into the house)
 2. Game state leverage justifies deployment (End 8 for Insurance, End 1-2 for First Strike)
 3. Pair characteristics align with deployment strategy (Power Hitter for early, Contact Hitter for late)
+
+**Note:** Since Power Plays must be declared before the end, teams cannot observe Traffic beforehand. The decision should be based on game state, opponent tendencies, and likelihood of maintaining lane clarity during execution.
 
 ### 6.2 Answering Coach Lazar's Question
 
@@ -229,10 +244,12 @@ For most teams, the data validates the "Insurance Closer" model: save the Power 
 ### 6.3 Practical Guidelines for Team USA
 
 **Traffic Management Protocol:**
-- Monitor Traffic throughout each end using the metric: count stones within $600$ units of button at $(x=750, y=800)$
-- Prioritize "clearing the bases" when Traffic approaches $5$
-- Maintain lane clarity in center corridor ($|x - 750| < 200$)
-- Execute clean takeouts to prevent traffic escalation before deploying Power Play stones
+Since Power Plays must be declared before the end starts, teams cannot wait to observe Traffic. However, during Power Play execution:
+- Monitor Traffic throughout the end using the metric: count stones within $600$ units of button at $(x=750, y=800)$
+- Actively "clear the bases" early in the end when Traffic approaches $5$ stones
+- Maintain lane clarity in center corridor ($|x - 750| < 200$) through strategic shot selection
+- Execute clean takeouts to prevent traffic escalation during Power Play execution
+- The decision to declare Power Play should consider game state and likelihood of maintaining low Traffic
 
 **Execution Optimization:**
 - **Primary:** Draw Weight (Task 0) - $3.13/4.0$ execution floor provides reliable foundation
