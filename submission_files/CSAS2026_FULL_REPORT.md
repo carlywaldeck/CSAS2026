@@ -191,6 +191,8 @@ The distribution is strongly left-skewed, with deployment concentrated in Ends 6
 
 **Average Points Scored per Power Play:**
 
+Power Play efficiency by end is calculated by filtering the dataset to Power Play ends (where `PowerPlay` is not null and greater than 0), grouping by `EndID`, and computing the mean of the `Result` column (points scored by the team with hammer) for each end. This yields the average points scored per Power Play deployment for each end number, with sample sizes varying significantly across ends.
+
 | End | Power Play Average | Sample Size | Interpretation |
 |-----|-------------------|-------------|----------------|
 | End 1 | $0.00$* | $0$ | No Power Plays deployed |
