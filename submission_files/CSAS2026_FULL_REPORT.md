@@ -27,14 +27,15 @@ The Power Play is non-renewable—each team can use it only once per game. This 
 
 ### 1.2 The Conservation Deadlock: A Striking Pattern
 
-Our analysis of international competition data reveals a striking pattern: elite teams have reached near-unanimous consensus to conserve Power Plays for late-game deployment. Out of $5,274$ ends analyzed across multiple competitions (Beijing 2022 Olympics, World Mixed Doubles Curling Championships 2023-2025), only **$1$ instance** ($0.02\%$) utilized a Power Play in Ends 1-2.
+Our analysis of international competition data reveals a striking pattern: elite teams have reached near-unanimous consensus to conserve Power Plays for late-game deployment. Out of $5,274$ ends analyzed across multiple competitions (Beijing 2022 Olympics, World Mixed Doubles Curling Championships 2023-2025), only **$1$ instance** ($0.02\%$) utilized a Power Play in Ends 1-2 (specifically End 2 by Norway, which resulted in 0 points). The vast majority of Power Plays ($69.1\%$) occur in Ends 6-7, with only $10.9\%$ in End 8.
 
 **Deployment Statistics:**
 - Total ends analyzed: $5,274$
 - Total Power Play ends: $598$ ($11.3\%$ of all ends)
-- End 1-2 Power Play count: $1$ ($0.02\%$ of all ends, $0.17\%$ of all Power Plays)
-- End 4 Power Play count: $43$ ($7.2\%$ of all Power Plays)
-- End 8 Power Play count: $555$ ($92.8\%$ of all Power Plays)
+- End 1-2 Power Play count: $1$ ($0.02\%$ of all ends, $0.17\%$ of all Power Plays) - End 2 by Norway, scored 0 points
+- End 4 Power Play count: $27$ ($4.5\%$ of all Power Plays)
+- End 6-7 Power Play count: $413$ ($69.1\%$ of all Power Plays) - Vast majority in late ends
+- End 8 Power Play count: $65$ ($10.9\%$ of all Power Plays)
 
 This near-total absence of early deployment represents what we term the **"Conservation Deadlock"**: elite teams have reached strategic consensus that early Power Play deployment carries unacceptable risk relative to its potential reward. But is this consensus data-justified, or is it strategic inertia?
 
@@ -121,7 +122,7 @@ Execution scores were aggregated by shot type and end number to identify pattern
 We calculated average points scored per Power Play end by end number:
 - Ends 1-2: Early deployment (sample size: $1$, statistically unreliable)
 - End 4: Mid-game deployment (sample size: $43$)
-- End 8: Late-game deployment (sample size: $555$)
+- End 8: Late-game deployment (sample size: $65$)
 
 We also calculated Big End rates (percentage of Power Plays scoring 3+ points) by end number to identify patterns in high-scoring outcomes.
 
@@ -173,9 +174,10 @@ Our analysis reveals a striking pattern in Power Play deployment that we term th
 **Deployment Statistics:**
 - Total ends analyzed: $5,274$
 - Total Power Play ends: $598$ ($11.3\%$ of all ends)
-- End 1-2 Power Play count: $1$ ($0.02\%$ of all ends, $0.17\%$ of all Power Plays)
-- End 4 Power Play count: $43$ ($7.2\%$ of all Power Plays)
-- End 8 Power Play count: $555$ ($92.8\%$ of all Power Plays)
+- End 1-2 Power Play count: $1$ ($0.02\%$ of all ends, $0.17\%$ of all Power Plays) - End 2 by Norway, scored 0 points
+- End 4 Power Play count: $27$ ($4.5\%$ of all Power Plays)
+- End 6-7 Power Play count: $413$ ($69.1\%$ of all Power Plays) - Vast majority in late ends
+- End 8 Power Play count: $65$ ($10.9\%$ of all Power Plays)
 
 This near-total absence of early deployment represents strategic consensus among elite teams: early Power Play deployment carries unacceptable risk relative to its potential reward. However, this consensus may be fear-justified rather than data-justified, as the sample size for early deployment ($1$ instance) prevents statistical validation.
 
@@ -187,7 +189,7 @@ This near-total absence of early deployment represents strategic consensus among
 |--------------|-------------------|-------------|----------------|
 | Ends 1-2     | $0.00$*           | $1$         | Conservation Deadlock (statistically unreliable) |
 | End 4        | $0.96$            | $43$        | Standard Efficiency |
-| End 8        | **$2.51$**        | $555$       | **Apparent Peak** |
+| End 8        | **$2.51$**        | $65$        | **Apparent Peak** |
 
 *Note: Only 1 instance prevents statistical reliability for Ends 1-2*
 
