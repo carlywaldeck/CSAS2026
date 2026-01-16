@@ -202,7 +202,7 @@ While Traffic provides a universal metric for congestion, "Tactical Ceiling" var
 
 An early "First Strike" Power Play is a viable strategy for a Power Hitting pair that wants to blow the game open, but a poor choice for a Contact pair that wins by grinding out $1$-point ends. Pair characteristics determine optimal deployment strategy:
 
-- **Power Hitting Pairs:** May benefit from early deployment when Traffic is low, leveraging their comfort with variance to create early leads. Their execution ceiling enables them to navigate moderate traffic more effectively than average pairs.
+- **Power Hitting Pairs:** May benefit from early deployment when game state suggests Traffic will remain manageable, leveraging their comfort with variance to create early leads. Their execution ceiling enables them to navigate moderate traffic more effectively than average pairs.
 
 - **Contact Hitting Pairs:** Should stick to the Insurance model, conserving the Power Play for End 8 where their precision advantages are maximized. Their execution floor strategy aligns with late-game deployment when leverage is highest.
 
@@ -233,7 +233,7 @@ Based on our analysis, we provide the following tactical guideline:
 
 **Final Answer:** The early Power Play (First Strike) is a high-risk gamble that should only be considered under specific conditions:
 
-1. **Traffic is Low:** Traffic must be $< 3$ stones to avoid the $-12.3\%$ efficiency penalty. High traffic neutralizes the Power Play's geometric advantages.
+1. **Game State Suggests Low Traffic:** Since Power Plays must be declared before the end, teams cannot observe Traffic. However, game state should suggest Traffic will remain $< 3$ stones during execution to avoid the $-12.3\%$ efficiency penalty. High traffic neutralizes the Power Play's geometric advantages.
 
 2. **Pair Profile:** The pair must be a "Power Hitter" profile—comfortable with variance and capable of executing high-probability shots in low-traffic scenarios. Contact Hitting pairs should stick to the Insurance model.
 
