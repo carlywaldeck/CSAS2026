@@ -68,7 +68,7 @@ The scarcity of early Power Plays raises a fundamental question: Are teams missi
 
 1. **Opportunity Cost:** Sacrifice End 8 option where efficiency appears to peak ($2.51$ points). Cannot deploy Power Play in critical late-game scenarios.
 
-2. **Traffic Uncertainty:** Cannot observe Traffic before declaring (must declare before end starts). Game state may suggest low Traffic, but cannot confirm until end begins.
+2. **Traffic Likelihood Uncertainty:** Cannot observe Traffic before declaring (must declare before end starts). Must assess likelihood of high Traffic developing during execution based on game state, but cannot confirm until end begins.
 
 3. **Execution Risk:** Ice conditions not fully understood in early ends. Player calibration may not be established, creating higher variance in execution quality.
 
@@ -118,24 +118,48 @@ where $\mathbf{1}[\cdot]$ is the indicator function. Stones with sentinel values
 
 ### 3.3 The Traffic Tax
 
-Our analysis of $598$ Power Play ends reveals a systematic negative correlation between house traffic and Power Play scoring efficiency:
+**Important Clarification:** Traffic is measured **during** Power Play execution (at each shot), not before the Power Play is declared. Since Power Plays must be declared before the end begins, teams cannot observe Traffic beforehand. However, Traffic develops during the end as stones are placed, and this congestion affects execution efficiency.
+
+Our analysis of $598$ Power Play ends reveals a systematic negative correlation between house traffic (measured during execution) and Power Play scoring efficiency:
 
 | Traffic Category | Average Points Scored | Efficiency Change |
 |------------------|----------------------|-------------------|
 | Low Traffic (0-2 stones) | $1.69$ | Baseline |
 | High Traffic (5+ stones) | $1.48$ | **$-12.3\%$** |
 
-**Key Finding:** When Traffic exceeds $5$ stones, Power Play scoring drops from $1.69$ points to $1.48$ points—a **$-12.3\%$ efficiency penalty**. This quantifies the "Traffic Tax": each additional stone in the house reduces the Power Play's geometric advantage.
+**Key Finding:** When Traffic exceeds $5$ stones **during Power Play execution**, scoring drops from $1.69$ points to $1.48$ points—a **$-12.3\%$ efficiency penalty**. This quantifies the "Traffic Tax": congestion that develops during the end reduces the Power Play's geometric advantage.
 
-### 3.4 Traffic Control: Starting from Zero
+### 3.4 Traffic Likelihood: Early vs. Late Ends
 
-**Critical Insight:** Traffic starts at $0$ in End 1. By deploying the Power Play early, teams avoid the Traffic Tax entirely. The geometric advantages (corner guards at $(x \approx 550$ or $950$, $y \approx 650$)$) operate in optimal conditions: open lanes, clear angles, minimal interference.
+**Critical Insight:** While teams cannot observe Traffic before declaring a Power Play, they can assess the **likelihood** of high Traffic developing during execution based on game state.
 
-By End 8, Traffic has accumulated from previous ends. Even with active management, teams operate from a disadvantaged starting position. Early deployment eliminates this disadvantage entirely.
+**End 1: Lower Traffic Likelihood**
 
-**The Decision Rule:**
+In End 1, the game state is simple:
+- No previous ends to create baseline positioning patterns
+- Opponent has not established defensive strategies
+- House geometry starts clean (Traffic begins at $0$ at the start of the end)
+- Lower likelihood of high Traffic developing during execution
 
-If Traffic $> 5$ stones during Power Play execution, the $-12.3\%$ penalty neutralizes Power Play advantages. Teams must actively manage Traffic by clearing stones early in the end. Since Power Plays must be declared before the end starts, teams cannot observe Traffic beforehand—they must assess likelihood based on game state.
+By deploying the Power Play in End 1, teams operate in conditions where the likelihood of high Traffic developing is minimized. The geometric advantages (corner guards at $(x \approx 550$ or $950$, $y \approx 650$)$) operate with lower congestion risk: open lanes, clear angles, minimal interference.
+
+**End 8: Higher Traffic Likelihood**
+
+By End 8, the game state is complex:
+- Seven previous ends have established positioning patterns
+- Opponent has adapted defensive strategies
+- Score situation may force aggressive play from both teams
+- Higher likelihood of high Traffic developing during execution
+
+Deploying the Power Play in End 8 means operating in conditions where the likelihood of high Traffic developing is elevated. Even if teams manage Traffic during execution, they face a higher probability of congestion that triggers the $-12.3\%$ penalty.
+
+**The Decision Framework:**
+
+Since Power Plays must be declared before the end starts, teams cannot observe Traffic beforehand. However, they can assess Traffic likelihood:
+- **Low Traffic Likelihood:** Simple game state (End 1), clean positioning, opponent unprepared
+- **High Traffic Likelihood:** Complex game state (End 8), established patterns, opponent adapted
+
+If the likelihood of Traffic $> 5$ stones developing during execution is high, the $-12.3\%$ penalty risk neutralizes Power Play advantages. Early deployment (End 1) minimizes this risk by operating in simpler game states where Traffic likelihood is lower.
 
 ---
 
@@ -316,7 +340,7 @@ The GBR model shows that Power Play success is driven by execution consistency, 
 Our analysis reveals that the answer to Coach Lazar's question depends on multiple factors:
 
 1. **Early Power Play (First Strike) is viable** when:
-   - Traffic can be managed (game state suggests low Traffic likelihood)
+   - Traffic likelihood is low (simple game state in End 1 suggests lower probability of congestion developing)
    - Ice conditions favor Draw execution (fresh ice in End 1)
    - Pair profile supports early deployment (Power Hitting pair comfortable with variance)
 
@@ -331,7 +355,7 @@ Our analysis reveals that the answer to Coach Lazar's question depends on multip
 **For Team USA:**
 
 Experiment with the First Strike when conditions favor it:
-- **Low Traffic likelihood:** Game state suggests Traffic will remain manageable
+- **Low Traffic likelihood:** Simple game state (End 1) suggests lower probability of high Traffic developing during execution
 - **Fresh ice:** End 1 provides optimal conditions for $3.13$ Draw execution
 - **Power Hitting pair profile:** Pair comfortable with variance and high execution ceiling
 
