@@ -202,7 +202,7 @@ The distribution is strongly left-skewed, with deployment concentrated in Ends 6
 
 *Note: Only 1 instance prevents statistical reliability for Ends 1-2*
 
-The efficiency progression from End 4 ($0.96$ points) to End 8 ($2.51$ points) appears to validate conservation. End 8's $2.51$-point average represents a $162\%$ premium over End 4's $0.96$ points, suggesting that late-game deployment maximizes efficiency.
+Average points scored per Power Play increase from early to late ends: End 4 averages $0.96$ points (n=$27$), End 5 averages $1.53$ points (n=$77$), End 6 averages $1.53$ points (n=$205$), End 7 averages $1.67$ points (n=$208$), and End 8 averages $2.51$ points (n=$65$). The efficiency progression from End 4 ($0.96$ points) to End 8 ($2.51$ points) appears to validate conservation, with End 8's $2.51$-point average representing a $162\%$ premium over End 4's $0.96$ points.
 
 However, this narrative may be a "Strategic Mirage"—we investigate whether End 8's apparent efficiency is inflated by opponent behavior (desperation, risk-taking) rather than superior Power Play effectiveness. Late-game scenarios create high-variance outcomes that may inflate averages through opponent errors rather than Power Play advantages.
 
