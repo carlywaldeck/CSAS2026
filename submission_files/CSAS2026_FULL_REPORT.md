@@ -7,23 +7,29 @@
 
 ## Abstract
 
-This study investigates the strategic deployment of Power Plays in international Mixed Doubles Curling competition, addressing Coach Phil Lazar's question: "We never know if using the Power Play in the first end or first half is right or wrong." Using a dataset of $26,370$ stone records and $5,274$ ends from Beijing 2022 Olympics and World Mixed Doubles Curling Championships (2023-2025), we analyze the near-unanimous consensus among elite teams to conserve Power Plays for late-game deployment (End 8), with only $1$ instance ($0.02\%$) of early deployment (Ends 1-2) in our dataset.
+We analyzed $26,370$ stone records across $5,274$ ends from Beijing 2022 Olympics and World Mixed Doubles Curling Championships (2023-2025) to investigate Power Play deployment timing. Only $1$ instance ($0.02\%$) of early deployment (Ends 1-2) exists in the dataset, while $69.1\%$ occur in Ends 6-7, revealing near-unanimous consensus on late deployment without empirical comparison.
 
-Our analysis reveals three key findings: (1) **Execution Gap:** Fresh ice in End 1 enables $3.13/4.0$ Draw execution ($78.3\%$ success), while deteriorated ice in End 8 forces $2.75/4.0$ Wick execution ($68.8\%$ success), creating a $13.6\%$ mechanical advantage for early deployment. (2) **Traffic Tax:** High congestion (5+ stones) during Power Play execution reduces scoring by $-12.3\%$, but this risk exists regardless of timing and must be managed during execution. (3) **Conservation Deadlock:** The field's near-total avoidance of early deployment may be fear-justified rather than data-justified, as End 8's apparent efficiency peak ($2.51$ points) may be inflated by opponent desperation rather than superior Power Play effectiveness.
+Three findings emerge: (1) Fresh ice enables $3.13/4.0$ Draw execution ($78.3\%$ success) versus deteriorated ice forcing $2.75/4.0$ Wick execution ($68.8\%$ success), creating a $13.6\%$ mechanical advantage for early deployment. (2) High congestion (5+ stones) reduces Power Play scoring by $-12.3\%$ regardless of timing. (3) End 8's apparent efficiency ($2.51$ points) may be partially inflated by opponent desperation rather than superior Power Play effectiveness.
 
-We conclude that early Power Play deployment is context-dependent and provides quantifiable mechanical advantages (fresh ice, execution gap) that are systematically undervalued. The $13.6\%$ execution gap is not theoretical—it represents a measurable difference in shot success probability that coaches can optimize.
+We conclude that early deployment offers quantifiable mechanical advantages that are systematically undervalued. The $13.6\%$ execution gap represents a measurable benefit teams sacrifice when waiting until late ends, suggesting the deployment decision should be context-dependent rather than following conventional timing.
 
 ---
 
 ## 1. Introduction
 
-### 1.1 Research Question and Context
+### 1.1 The Strategic Question
 
-Mixed Doubles Curling introduces a strategic innovation: the Power Play, a one-time resource that allows teams to pre-place two corner guards before an end begins, creating geometric advantages for scoring. The Power Play's strategic value derives from these pre-placed corner guards positioned at approximately $(x \approx 550$ or $950$, $y \approx 650$)$, which create open lanes for drawing behind guards and clean angles for takeouts. However, a fundamental strategic question remains unanswered: **When should teams deploy the Power Play?**
+During a Zoom information session for this data challenge, USA Curling's Mark Lazar mentioned the tendency of Luke Violet and Eileen Geving to deploy their Power Play to open their game. He noted that there's no clear way to know if the decision is right or wrong. This comment became the starting point for our analysis.
 
-Coach Phil Lazar of USA Curling articulated this uncertainty: *"We never know if using the Power Play in the first end or first half is right or wrong."* This question reflects a broader strategic tension in elite Mixed Doubles competition: should teams deploy the Power Play early to build a lead (the "First Strike" strategy), or conserve it for the critical final end (the "Insurance Closer" strategy)?
+Mixed Doubles Curling gives each team one Power Play per game. When deployed, two corner guards are pre-placed on the sheet before the end begins, creating space for a team with the hammer with a higher chance of scoring. The Power Play's strategic value derives from these pre-placed corner guards positioned at approximately $(x \approx 550$ or $950$, $y \approx 650$)$, which create open lanes for drawing behind guards and clean angles for takeouts. However, the Power Play can only be used once, which raises an important question: **How can a team use Power Play most effectively?**
 
-The Power Play is non-renewable—each team can use it only once per game. This constraint creates a fundamental strategic decision: deploy early to establish a lead, or conserve for late-game leverage when match outcomes are determined. The decision carries significant opportunity cost: using the Power Play in End 1 sacrifices the option to deploy it in End 8, where game state leverage may be maximized.
+The decision carries significant opportunity cost: using the Power Play in End 1 sacrifices the option to deploy it in End 8, where game state leverage may be maximized. Should teams deploy early to build a lead (the "First Strike" strategy), or conserve it for the critical final end (the "Insurance Closer" strategy)?
+
+### 1.2 The Baseball Analogy: Challenging Conventional Wisdom
+
+In baseball, teams saved their best reliever for the ninth inning regardless of context for decades. The ninth inning was when you used your closer, period. Then analysts started asking whether that timing was actually optimal or just traditional. They found that high-leverage situations happen throughout games, not just in the ninth inning. Teams began deploying closers earlier when leverage demanded it—in the seventh or eighth inning, or even as an opener in playoff games.
+
+The Power Play faces a similar question. The field has a tendency to save it for later ends, but is that timing optimal because of strategic advantages, or is it just what everyone does? With essentially no data on early deployment, we can't know. This study investigates whether early deployment offers mechanical or strategic advantages that are currently undervalued.
 
 ### 1.2 The Conservation Deadlock: A Striking Pattern
 
